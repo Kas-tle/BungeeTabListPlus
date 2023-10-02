@@ -186,6 +186,9 @@ public class NewTabOverlayHandler implements PacketHandler, TabOverlayHandler {
             // Ensure that unsafe packets are not sent in the config phase
             // Why bungee doesn't expose this via api beyond me...
             // https://github.com/SpigotMC/BungeeCord/blob/1ef4d27dbea48a1d47501ad2be0d75e42cc2cc12/proxy/src/main/java/net/md_5/bungee/UserConnection.java#L182-L192
+
+            // Avoid adding packets to queue for players that are not connected
+            if (!player.getPendingConnection().isConnected()) { return; }
             ((UserConnection) player).sendPacketQueued(packet);
         } else {
             player.unsafe().sendPacket(packet);
